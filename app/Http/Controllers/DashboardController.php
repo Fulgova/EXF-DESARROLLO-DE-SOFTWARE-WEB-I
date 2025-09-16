@@ -8,14 +8,13 @@ use App\Models\Client;
 
 class DashboardController extends Controller
 {
-public function index()
-{
-    $usersCount = User::count();
-    $productsCount = Product::count();
-    $clientsCount = Client::count();
-    $users = User::all(); // 👈 aquí traemos todos los usuarios
-
-    return view('dashboard', compact('usersCount', 'productsCount', 'clientsCount', 'users'));
-}
-
+    public function index()
+    {
+        return view('dashboard', [
+            'usersCount' => User::count(),
+            'productsCount' => Product::count(),
+            'clientsCount' => Client::count(),
+            'users' => User::all(),
+        ]);
+    }
 }

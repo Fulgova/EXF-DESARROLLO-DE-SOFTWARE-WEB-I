@@ -9,11 +9,7 @@
       <div class="card-body">
         <h1 class="mb-2">Crear cuenta</h1>
 
-        {{-- 
-          Si tu endpoint es API, usa action="{{ url('/api/register') }}".
-          Si definiste una ruta web con nombre "register", usa route('register').
-        --}}
-        <form method="POST" action="{{ url('/api/register') }}">
+        <form method="POST" action="{{ route('registerweb') }}">
           @csrf
 
           {{-- RUT --}}
@@ -60,9 +56,7 @@
           <button type="submit" class="btn btn-primary w-100">Registrar</button>
         </form>
 
-        <p class="mt-2">
-          ¿Ya tienes cuenta? <a href="{{ route('login') }}">Inicia sesión</a>
-        </p>
+        <p class="mt-2">¿Ya tienes cuenta? <a href="{{ route('loginweb') }}">Inicia sesión</a></p>
       </div>
     </div>
   </div>

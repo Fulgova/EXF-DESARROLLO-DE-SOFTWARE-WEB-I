@@ -6,74 +6,81 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthWebController extends Controller
 {
-    // Mostrar el formulario de inicio de sesión
+    // Mostrar login
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    // Procesar el inicio de sesión
+    // Procesar login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required'],
-        ]);
+        $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
+        try {
+            if (!$token = JWTAuth::attempt($credentials)) {
+                return back()->withErrors(['email' => 'Credenciales inválidas']);
+            }
+
+            session(['jwt_token' => $token]);
+
+            return redirect()->route('dashboard');
+        } catch (JWTException $e) {
+            return back()->withErrors(['email' => 'Error interno, intenta de nuevo.']);
         }
-
-        return back()->withErrors([
-            'email' => 'Las credenciales no son válidas.',
-        ]);
     }
 
-    // Procesar el registro de un nuevo usuario
-    public function register(Request $request)
-    {
-        // Validación de los datos del formulario
-        $validatedData = $request->validate([
-            'rut' => ['required', 'string', 'max:12', 'unique:users'],  // Validación para RUT
-            'nombre' => ['required', 'string', 'max:255'],  // Validación para nombre
-            'apellido' => ['required', 'string', 'max:255'],  // Validación para apellido
-            'email' => ['required', 'email', 'unique:users,email'],  // Validación para email
-            'password' => ['required', 'confirmed', 'min:8'],  // Validación para password
-        ]);
-
-        // Crear el usuario
-        $user = User::create([
-            'rut' => $validatedData['rut'],        // Guardamos el RUT
-            'nombre' => $validatedData['nombre'],  // Guardamos el nombre
-            'apellido' => $validatedData['apellido'], // Guardamos el apellido
-            'email' => $validatedData['email'],    // Guardamos el email
-            'password' => Hash::make($validatedData['password']), // Guardamos el password encriptado
-        ]);
-
-        // Autenticar al nuevo usuario
-        Auth::login($user);
-
-        // Redirigir al dashboard u otra página después del registro
-        return redirect('/dashboard');
-    }
-
-    // Mostrar el formulario de registro
+    // Mostrar registro
     public function showRegistrationForm()
     {
-        return view('auth.register'); // Asegúrate de tener la vista 'auth.register'
+        return view('auth.register');
     }
 
-    // Cerrar sesión
-    public function logout(Request $request)
-    {
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+    // Procesar registro
+    public function register(Request $request)
+{
+    $validatedData = $request->validate([
+        'rut' => ['required', 'string', 'max:12', 'unique:users'],
+        'nombre' => ['required', 'string', 'max:255'],
+        'apellido' => ['required', 'string', 'max:255'],
+        'email' => ['required', 'email', 'unique:users,email'],
+        'password' => ['required', 'confirmed', 'min:8'],
+    ]);
 
-        return redirect('/login');
+    $user = User::create([
+        'rut' => $validatedData['rut'],
+        'nombre' => $validatedData['nombre'],
+        'apellido' => $validatedData['apellido'],
+        'email' => $validatedData['email'],
+        'password' => Hash::make($validatedData['password']),
+    ]);
+
+    // 🔹 En lugar de loguear directamente, mandamos un flash a la vista
+return redirect()->route('loginweb')->with('success', 'Usuario registrado correctamente.');
+
+}
+
+    // Logout
+    public function logout()
+    {
+        $token = session('jwt_token');
+
+        if ($token) {
+            try {
+                JWTAuth::setToken($token)->invalidate();
+            } catch (\Exception $e) {
+                // ignoramos si ya expiró
+            }
+        }
+
+        session()->forget('jwt_token');
+        Auth::logout();
+
+        return redirect('/loginweb');
     }
 }

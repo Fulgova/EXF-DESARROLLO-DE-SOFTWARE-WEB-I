@@ -4,14 +4,17 @@
 
 @section('content')
   <!-- Header con botón logout -->
-    <nav class="navbar navbar-light bg-white shadow-sm px-3 d-flex justify-content-between">
-        <span class="navbar-brand mb-0 h4">Dashboard</span>
-        <button class="btn btn-danger btn-sm" onclick="logout()">
-            <i class="fa fa-sign-out-alt"></i> Cerrar sesión
-        </button>
-    </nav>
+  <nav class="navbar navbar-light bg-white shadow-sm px-3 d-flex justify-content-between">
+      <span class="navbar-brand mb-0 h4">Dashboard</span>
+      <form method="POST" action="{{ route('logoutweb') }}">
+          @csrf
+          <button type="submit" class="btn btn-danger btn-sm">
+              <i class="fa fa-sign-out-alt"></i> Cerrar sesión
+          </button>
+      </form>
+  </nav>
 
-<div class="row">
+<div class="row mt-3">
     <!-- Usuarios -->
     <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
         <div class="card text-center">
@@ -121,11 +124,9 @@
 <script>
 function buscarUsuario() {
     let id = document.getElementById('usuarioId').value;
-    let token = localStorage.getItem('jwt_token');
 
-    fetch(`/api/users/${id}`, {
+    fetch(`/users/${id}`, { // 👉 usamos la ruta web, no API
         headers: {
-            'Authorization': 'Bearer ' + token,
             'Accept': 'application/json'
         }
     })
@@ -151,23 +152,6 @@ function buscarUsuario() {
             <div class="alert alert-danger">${error.message}</div>
         `;
     });
-}
-
-function logout() {
-    // limpiar token
-    localStorage.removeItem('jwt_token');
-
-    // opcional: invalidar token en el backend
-    fetch('/api/logout', {
-        method: 'POST',
-        headers: {
-            'Authorization': 'Bearer ' + (localStorage.getItem('jwt_token') || ''),
-            'Accept': 'application/json'
-        }
-    }).catch(() => {});
-
-    // redirigir al login
-    window.location.href = '/loginweb';
 }
 </script>
 @endpush

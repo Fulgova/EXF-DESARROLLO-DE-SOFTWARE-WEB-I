@@ -2,28 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    // Registro de usuario
+    // Registro por API
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'rut' => 'required|string|max:12|unique:users',
-            'nombre' => 'required|string|max:50',
-            'apellido' => 'required|string|max:50',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:8',
+        $request->validate([
+            'rut' => 'required|string|unique:users',
+            'nombre' => 'required|string|max:255',
+            'apellido' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
         ]);
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
-        }
 
         $user = User::create([
             'rut' => $request->rut,
@@ -35,28 +30,21 @@ class AuthController extends Controller
 
         $token = JWTAuth::fromUser($user);
 
-        return response()->json(compact('user', 'token'), 201);
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ], 201);
     }
 
-    // Login de usuario
+    // Login por API
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
-        if (!$token = auth('api')->attempt($credentials)) {
+        if (!$token = JWTAuth::attempt($credentials)) {
             return response()->json(['error' => 'Credenciales inválidas'], 401);
         }
 
-        return response()->json([
-            'token' => $token,
-            'user' => auth('api')->user()
-        ]);
-    }
-
-    // Logout
-    public function logout()
-    {
-        auth('api')->logout();
-        return response()->json(['message' => 'Sesión cerrada correctamente']);
+        return response()->json(['token' => $token]);
     }
 }
