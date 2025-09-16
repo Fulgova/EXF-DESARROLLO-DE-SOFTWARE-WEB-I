@@ -14,9 +14,9 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 });
 
-Route::get('/login', [AuthWebController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthWebController::class, 'login']);
-Route::post('/logout', [AuthWebController::class, 'logout'])->name('logout');
+Route::get('/loginweb', [AuthWebController::class, 'showLoginForm'])->name('login');
+Route::post('/loginweb', [AuthWebController::class, 'login']);
+Route::post('/logoutweb', [AuthWebController::class, 'logout'])->name('logout');
 
-Route::get('/register', [AuthWebController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [AuthWebController::class, 'register']);
+Route::get('/registerweb', [AuthWebController::class, 'showRegistrationForm'])->name('register');
+Route::post('/registerweb', [AuthWebController::class, 'register']);

@@ -1,65 +1,199 @@
 <!DOCTYPE html>
-<html class="loading" lang="es" data-textdirection="ltr">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <meta name="description" content="Panel de Administración - VentasFix">
-    <meta name="keywords" content="admin template, dashboard">
-    <meta name="author" content="VentasFix">
-    <title>@yield('title', 'VentasFix Backoffice')</title>
 
-    <!-- ========== CSS PRINCIPAL DEL TEMPLATE ========== -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap-extended.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/colors.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/components.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/themes/dark-layout.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/themes/bordered-layout.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/themes/semi-dark-layout.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/core/menu/menu-types/vertical-menu.css') }}">
-    
-    <!-- Aquí puedes agregar más CSS si el template tiene adicionales -->
-    @stack('styles')
-</head>
-<body class="vertical-layout vertical-menu-modern navbar-floating footer-static" data-open="click" data-menu="vertical-menu-modern" data-col="">
+<html
+  lang="en"
+  class="light-style customizer-hide"
+  dir="ltr"
+  data-theme="theme-default"
+  data-assets-path="assets/"
+  data-template="vertical-menu-template-no-customizer">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
 
-    <!-- ======= HEADER / NAVBAR ======= -->
-    @includeIf('partials.navbar')
+    <title>Vuexy | Vuexy - Bootstrap Admin Template</title>
 
-    <!-- ======= MENU LATERAL ======= -->
-    @includeIf('partials.sidebar')
+    <meta name="description" content="" />
 
-    <!-- ======= CONTENIDO PRINCIPAL ======= -->
-    <div class="app-content content">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-        <div class="content-wrapper">
-            <div class="content-header row"></div>
-            <div class="content-body">
-                @yield('content')
-            </div>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="assets/vendor/css/rtl/core.css" />
+    <link rel="stylesheet" href="assets/vendor/css/rtl/theme-default.css" />
+    <!--<link rel="stylesheet" href="assets/css/demo.css" />-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('app-assets/css/bootstrap.css') }}">
+    <script src="{{ asset('app-assets/js/core/app-menu.js') }}"></script>
+  </head>
+
+  <body>
+    <!-- Content -->
+    <div class="container flex-grow-1 container-p-y my-2">
+      <h3>Thank you for purchasing Vuexy! 😇</h3>
+      <p>
+        Easily navigate to demos, documentation, support or changelog using below links.<br />
+        Git repo access link helps you to request the repository access, once approved one can use the repository to
+        raise an issus(support, feature request & feedback) and track future updates & releases.
+      </p>
+      <!-- Examples -->
+      <div class="row mt-sm-4 mt-3">
+        <div class="col-12 mb-3">
+          <div class="card">
+            <h5 class="card-header">Template Links</h5>
+            <!-- Template Demo Links -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Full Version</th>
+                  <th scope="col">Starter</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><a href="html/vertical-menu-template/index.html" target="_blank">Vertical Menu Template</a></td>
+                  <td>
+                    <a href="html-starter/vertical-menu-template/index.html" target="_blank">Vertical Menu Template</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="html/vertical-menu-template-no-customizer/index.html" target="_blank"
+                      >Vertical Menu Template</a
+                    >
+                    (Without Customizer)
+                  </td>
+                  <td>
+                    <a href="html-starter/vertical-menu-template-no-customizer/index.html" target="_blank"
+                      >Vertical Menu Template</a
+                    >
+                    (Without Customizer)
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="html/horizontal-menu-template/index.html" target="_blank">Horizontal Menu Template</a>
+                  </td>
+                  <td>
+                    <a href="html-starter/horizontal-menu-template/index.html" target="_blank"
+                      >Horizontal Menu Template</a
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="html/horizontal-menu-template-no-customizer/index.html" target="_blank"
+                      >Horizontal Menu Template</a
+                    >
+                    (Without Customizer)
+                  </td>
+                  <td>
+                    <a href="html-starter/horizontal-menu-template-no-customizer/index.html" target="_blank"
+                      >Horizontal Menu Template</a
+                    >
+                    (Without Customizer)
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="html/front-pages/landing-page.html" target="_blank">Front Pages</a>
+                  </td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td>
+                    <a href="html/front-pages-no-customizer/landing-page.html" target="_blank">Front Pages</a>
+                    (Without Customizer)
+                  </td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+            <!--/ Template Demo Links -->
+          </div>
         </div>
+
+        <div class="col-12 mb-3">
+          <div class="card">
+            <h5 class="card-header">Other Important Links</h5>
+            <!-- Other Links -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">URL</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>License</td>
+                  <td>
+                    <a href="https://themeforest.net/licenses/standard" target="_blank"
+                      >https://themeforest.net/licenses/standard</a
+                    >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Documentation</td>
+                  <td>
+                    <a href="https://demos.pixinvent.com/vuexy-html-admin-template/documentation/" target="_blank"
+                      >https://demos.pixinvent.com/vuexy-html-admin-template/documentation/</a
+                    >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Changelog</td>
+                  <td>
+                    <a href="https://demos.pixinvent.com/vuexy/changelog.html" target="_blank"
+                      >https://demos.pixinvent.com/vuexy/changelog.html</a
+                    >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>GitHub Repository Access</td>
+                  <td>
+                    <a href="https://tools.pixinvent.com/github/github-access" target="_blank"
+                      >https://tools.pixinvent.com/github/github-access</a
+                    >
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Support</td>
+                  <td>
+                    <a href="https://pixinvent.ticksy.com/" target="_blank">https://pixinvent.ticksy.com/</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <!--/ Other Links -->
+          </div>
+        </div>
+      </div>
+
+      <div class="text-big py-4">
+        <p>
+          Please don’t forget to rate and share <strong>Vuexy</strong> and leave a nice review, it means a lot for us
+          and our theme. Simply log in to
+          <a href="https://themeforest.net/" target="_blank"><strong>https://themeforest.net/</strong></a> Account, go
+          to Downloads section and click 5 stars next to the <strong>Vuexy</strong> template.
+        </p>
+      </div>
     </div>
-
-    <!-- ======= FOOTER ======= -->
-    @includeIf('partials.footer')
-
-    <!-- ========== JS PRINCIPAL DEL TEMPLATE ========== -->
-    <script src="{{ asset('assets/vendor/js/vendors.min.js') }}"></script>
-    <script src="{{ asset('assets/js/core/app-menu.js') }}"></script>
-    <script src="{{ asset('assets/js/core/app.js') }}"></script>
-    <script src="{{ asset('assets/js/scripts/customizer.js') }}"></script>
-
-    <!-- Aquí puedes agregar JS adicionales si el template los tiene -->
-    @stack('scripts')
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            if (typeof feather !== 'undefined') {
-                feather.replace({ width: 14, height: 14 });
-            }
-        });
-    </script>
-</body>
+    <!-- / Content -->
+     <div class="content">
+    @yield('content')
+          </div>
+  </body>
 </html>
