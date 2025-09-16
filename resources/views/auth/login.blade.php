@@ -1,46 +1,33 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}"> <!-- Si tienes un archivo CSS personalizado -->
-</head>
-<body>
-    <div class="container">
-        <h2>Iniciar sesión</h2>
+@extends('layouts.app')
 
-        <!-- Mostrar errores de validación -->
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
+@section('title', 'Iniciar sesión')
+
+@section('content')
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <div class="card">
+            <div class="card-header"><h4>Login</h4></div>
+            <div class="card-body">
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+
+                    <div class="form-group mb-2">
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" class="form-control" id="email" name="email" required autofocus>
+                        @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+
+                    <div class="form-group mb-2">
+                        <label for="password">Contraseña</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        @error('password') <small class="text-danger">{{ $message }}</small> @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Iniciar sesión</button>
+                </form>
+                <p class="mt-2">¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate</a></p>
             </div>
-        @endif
-
-        <!-- Formulario de login -->
-        <form action="{{ route('login') }}" method="POST">
-            @csrf
-
-            <div class="mb-3">
-                <label for="email" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="email" name="email" value="{{ old('email') }}" required>
-            </div>
-
-            <div class="mb-3">
-                <label for="password" class="form-label">Contraseña</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-
-            <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-        </form>
-
-        <p class="mt-3">
-            ¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate</a>
-        </p>
+        </div>
     </div>
-</body>
-</html>
+</div>
+@endsection
