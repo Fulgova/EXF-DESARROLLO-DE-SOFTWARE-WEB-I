@@ -5,58 +5,46 @@ use App\Http\Controllers\UserWebController;
 use App\Http\Controllers\AuthWebController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\ProductWebController;
 use App\Models\User;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Listado de usuarios (protegido con JWT)
-Route::get('/usuarios', [UserWebController::class, 'index'])
-    ->middleware('jwt.web');
-Route::get('/users/{id}', [UserWebController::class, 'show']);
-Route::post('/users', [UserWebController::class, 'store']);
-Route::delete('/users/{id}', [UserWebController::class, 'destroy']);
-Route::put('/users/{id}', [UserWebController::class, 'update']);
-
-// Dashboard protegido con JWT
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->middleware('jwt.web')
-    ->name('dashboard');
-// Login Web
+// Login y Registro (sin protección, porque necesitas entrar primero)
 Route::get('/loginweb', [AuthWebController::class, 'showLoginForm'])->name('loginweb');
 Route::post('/loginweb', [AuthWebController::class, 'login']);
-
-// Logout Web
-Route::post('/logoutweb', [AuthWebController::class, 'logout'])->name('logoutweb');
-
-// Registro Web
 Route::get('/registerweb', [AuthWebController::class, 'showRegistrationForm'])->name('registerweb');
 Route::post('/registerweb', [AuthWebController::class, 'register']);
 
-// Buscar usuario por ID (protegido con JWT)
-Route::get('/users/{id}', function ($id) {
-    $user = User::find($id);
+// Rutas protegidas con JWT
+Route::middleware(['jwt.web'])->group(function () {
 
-    if (!$user) {
-        return response()->json(['error' => 'Usuario no encontrado'], 404);
-    }
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    return response()->json($user);
-})->middleware('jwt.web');
+    // Usuarios
+    Route::get('/usuarios', [UserWebController::class, 'index']);
+    Route::get('/users/{id}', [UserWebController::class, 'show']);
+    Route::post('/users', [UserWebController::class, 'store']);
+    Route::put('/users/{id}', [UserWebController::class, 'update']);
+    Route::delete('/users/{id}', [UserWebController::class, 'destroy']);
 
-use App\Http\Controllers\ProductWebController;
+    // Productos
+    Route::get('/products', [ProductWebController::class, 'index']);
+    Route::get('/products/{id}', [ProductWebController::class, 'show']);
+    Route::post('/products', [ProductWebController::class, 'store']);
+    Route::put('/products/{id}', [ProductWebController::class, 'update']);
+    Route::delete('/products/{id}', [ProductWebController::class, 'destroy']);
 
-// Productos
-Route::get('/products', [ProductWebController::class, 'index']);
-Route::get('/products/{id}', [ProductWebController::class, 'show']);
-Route::post('/products', [ProductWebController::class, 'store']);
-Route::put('/products/{id}', [ProductWebController::class, 'update']);
-Route::delete('/products/{id}', [ProductWebController::class, 'destroy']);
+    // Clientes
+    Route::get('/clients', [ClientsController::class, 'index']);
+    Route::get('/clients/{id}', [ClientsController::class, 'show']);
+    Route::post('/clients', [ClientsController::class, 'store']);
+    Route::put('/clients/{id}', [ClientsController::class, 'update']);
+    Route::delete('/clients/{id}', [ClientsController::class, 'destroy']);
 
-// Clientes
-Route::get('/clients', [ClientsController::class, 'index']);
-Route::get('/clients/{id}', [ClientsController::class, 'show']);
-Route::post('/clients', [ClientsController::class, 'store']);
-Route::put('/clients/{id}', [ClientsController::class, 'update']);
-Route::delete('/clients/{id}', [ClientsController::class, 'destroy']);
+    // Logout
+    Route::post('/logoutweb', [AuthWebController::class, 'logout'])->name('logoutweb');
+});

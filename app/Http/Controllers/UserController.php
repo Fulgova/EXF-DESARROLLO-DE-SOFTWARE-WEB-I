@@ -73,22 +73,26 @@ class UserController extends Controller
             'nombre' => 'required|string|max:50',
             'apellido' => 'required|string|max:50',
             'email' => 'required|email|unique:users,email,'.$user->id,
-            'password' => 'nullable|string|min:8',
+            'password' => 'required|string|min:8',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
+        
+ $user->update([
+    'rut' => $request->rut,
+    'nombre' => $request->nombre,
+    'apellido' => $request->apellido,
+    'email' => $request->email,
+    'password' => $request->password ? Hash::make($request->password) : $user->password,
+]);
 
-        $user->update([
-            'rut' => $request->rut,
-            'nombre' => $request->nombre,
-            'apellido' => $request->apellido,
-            'email' => $request->email,
-            'password' => $request->password ? Hash::make($request->password) : $user->password,
-        ]);
+return response()->json([
+    'message' => ' Usuario actualizado correctamente.',
+    'user' => $user->only(['id','rut','nombre','apellido','email'])
+], 200);
 
-        return response()->json($user, 200);
     }
 
     // Eliminar un usuario
