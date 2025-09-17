@@ -70,17 +70,34 @@
   </div>
 </div>
 
-    <!-- Clientes -->
-    <div class="col-lg-4 col-md-6 col-sm-12 mb-2">
-        <div class="card text-center">
-            <div class="card-body">
-                <h4 class="card-title">Clientes</h4>
-                <h2>{{ $clientsCount }}</h2>
-                <p class="card-text">Total registrados</p>
-            </div>
-        </div>
+<!-- Clientes -->
+<div class="col-lg-4 col-md-6 col-sm-12 mb-2">
+  <div class="card text-center">
+    <div class="card-body">
+      <h4 class="card-title">Clientes</h4>
+      <h2>{{ $clientsCount }}</h2>
+      <p class="card-text">Total registrados</p>
+
+      <!-- Botones -->
+      <button class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#clientesModal">
+          Ver clientes
+      </button>
+      <button class="btn btn-outline-success btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#buscarClienteModal">
+          Buscar por ID
+      </button>
+      <button class="btn btn-outline-primary btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#crearClienteModal">
+          Crear cliente
+      </button>
+      <button class="btn btn-outline-danger btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#eliminarClienteModal">
+          Eliminar por ID
+      </button>
+      <button class="btn btn-outline-warning btn-sm mb-1" data-bs-toggle="modal" data-bs-target="#editarClienteModal">
+          Editar cliente
+      </button>
     </div>
+  </div>
 </div>
+
 
 <!-- ====================== MODALES ====================== -->
 
@@ -179,16 +196,21 @@
     <div class="modal-content">
       <div class="modal-header"><h5 class="modal-title">Editar Usuario</h5></div>
       <div class="modal-body">
-        <input type="number" id="editarUsuarioId" class="form-control mb-2" placeholder="ID del usuario">
-        <input type="text" id="editarNombre" class="form-control mb-2" placeholder="Nuevo nombre">
-        <input type="text" id="editarApellido" class="form-control mb-2" placeholder="Nuevo apellido">
-        <input type="email" id="editarEmail" class="form-control mb-2" placeholder="Nuevo correo">
-        <button type="button" class="btn btn-warning w-100" onclick="editarUsuario()">Guardar cambios</button>
+        <form id="editarUsuarioForm">
+          <input type="number" id="editarUsuarioId" class="form-control mb-2" placeholder="ID del usuario" required>
+          <!-- Botón para cargar datos del usuario -->
+          <button type="button" class="btn btn-info w-100 mb-3" onclick="cargarUsuarioEditar()">Cargar datos</button>
+          <input type="text" id="editarNombre" class="form-control mb-2" placeholder="Nuevo nombre">
+          <input type="text" id="editarApellido" class="form-control mb-2" placeholder="Nuevo apellido">
+          <input type="email" id="editarEmail" class="form-control mb-2" placeholder="Nuevo correo">
+          <button type="button" class="btn btn-warning w-100" onclick="editarUsuario()">Guardar cambios</button>
+        </form>
         <div id="editarUsuarioResultado" class="mt-2"></div>
       </div>
     </div>
   </div>
 </div>
+
 <!-- Ver productos -->
 <div class="modal fade" id="productosModal" tabindex="-1">
   <div class="modal-dialog modal-xl">
@@ -330,9 +352,130 @@
   </div>
 </div>
 
+<!-- Ver clientes -->
+<div class="modal fade" id="clientesModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Lista de Clientes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>RUT Empresa</th>
+              <th>Rubro</th>
+              <th>Razón Social</th>
+              <th>Teléfono</th>
+              <th>Dirección</th>
+              <th>Nombre Contacto</th>
+              <th>Email Contacto</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($clients as $client)
+            <tr>
+              <td>{{ $client->id }}</td>
+              <td>{{ $client->rut_empresa }}</td>
+              <td>{{ $client->rubro }}</td>
+              <td>{{ $client->razon_social }}</td>
+              <td>{{ $client->telefono }}</td>
+              <td>{{ $client->direccion }}</td>
+              <td>{{ $client->nombre_contacto }}</td>
+              <td>{{ $client->email_contacto }}</td>
+            </tr>
+            @endforeach
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Buscar cliente -->
+<div class="modal fade" id="buscarClienteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Buscar Cliente por ID</h5></div>
+      <div class="modal-body">
+        <input type="number" id="clienteId" class="form-control mb-2" placeholder="Ej: 1">
+        <button type="button" class="btn btn-success w-100" onclick="buscarCliente()">Buscar</button>
+        <div id="clienteResultado" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Crear cliente -->
+<div class="modal fade" id="crearClienteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Crear Cliente</h5></div>
+      <div class="modal-body">
+        <form id="crearClienteForm">
+          <input type="text" id="rutEmpresaCliente" class="form-control mb-2" placeholder="RUT Empresa" required>
+          <input type="text" id="rubroCliente" class="form-control mb-2" placeholder="Rubro" required>
+          <input type="text" id="razonSocialCliente" class="form-control mb-2" placeholder="Razón Social" required>
+          <input type="text" id="telefonoCliente" class="form-control mb-2" placeholder="Teléfono">
+          <input type="text" id="direccionCliente" class="form-control mb-2" placeholder="Dirección">
+          <input type="text" id="nombreContactoCliente" class="form-control mb-2" placeholder="Nombre Contacto" required>
+          <input type="email" id="emailContactoCliente" class="form-control mb-2" placeholder="Email Contacto" required>
+          <button type="button" class="btn btn-primary w-100" onclick="crearCliente()">Crear</button>
+        </form>
+        <div id="crearClienteResultado" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Editar cliente -->
+<div class="modal fade" id="editarClienteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Editar Cliente</h5></div>
+      <div class="modal-body">
+        <form id="editarClienteForm">
+          <input type="number" id="editarClienteId" class="form-control mb-2" placeholder="ID del cliente" required>
+          <button type="button" class="btn btn-info w-100 mb-3" onclick="cargarClienteEditar()">Cargar datos</button>
+
+          <input type="text" id="editarRutEmpresaCliente" class="form-control mb-2" placeholder="RUT Empresa">
+          <input type="text" id="editarRubroCliente" class="form-control mb-2" placeholder="Rubro">
+          <input type="text" id="editarRazonSocialCliente" class="form-control mb-2" placeholder="Razón Social">
+          <input type="text" id="editarTelefonoCliente" class="form-control mb-2" placeholder="Teléfono">
+          <input type="text" id="editarDireccionCliente" class="form-control mb-2" placeholder="Dirección">
+          <input type="text" id="editarNombreContactoCliente" class="form-control mb-2" placeholder="Nombre Contacto">
+          <input type="email" id="editarEmailContactoCliente" class="form-control mb-2" placeholder="Email Contacto">
+
+          <button type="button" class="btn btn-warning w-100" onclick="editarCliente()">Guardar cambios</button>
+        </form>
+        <div id="editarClienteResultado" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Eliminar cliente -->
+<div class="modal fade" id="eliminarClienteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h5 class="modal-title">Eliminar Cliente</h5></div>
+      <div class="modal-body">
+        <input type="number" id="eliminarClienteId" class="form-control mb-2" placeholder="ID del cliente">
+        <button type="button" class="btn btn-danger w-100" onclick="eliminarCliente()">Eliminar</button>
+        <div id="eliminarClienteResultado" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @endsection
 
 @push('scripts')
+
+          <!-- Scripts-->
 <script>
 // Buscar usuario
 function buscarUsuario() {
@@ -454,6 +597,30 @@ function editarUsuario() {
     document.getElementById('editarUsuarioResultado').innerHTML =
       `<div class="alert alert-danger">Error al editar usuario</div>`;
   });
+}
+function cargarUsuarioEditar() {
+  let id = document.getElementById('editarUsuarioId').value.trim();
+  if (!id) {
+    document.getElementById('editarUsuarioResultado').innerHTML =
+      `<div class="alert alert-warning">Debes ingresar un ID primero</div>`;
+    return;
+  }
+
+  fetch(`/users/${id}`, { headers: { 'Accept': 'application/json' } })
+    .then(res => { if (!res.ok) throw new Error('Usuario no encontrado'); return res.json(); })
+    .then(user => {
+      // Cargar valores en los inputs
+      document.getElementById('editarNombre').value = user.nombre || '';
+      document.getElementById('editarApellido').value = user.apellido || '';
+      document.getElementById('editarEmail').value = user.email || '';
+
+      document.getElementById('editarUsuarioResultado').innerHTML =
+        `<div class="alert alert-success">Datos cargados, ahora puedes editarlos</div>`;
+    })
+    .catch(err => {
+      document.getElementById('editarUsuarioResultado').innerHTML =
+        `<div class="alert alert-danger">${err.message}</div>`;
+    });
 }
 
 // Buscar producto
@@ -634,6 +801,134 @@ function cargarProductoEditar() {
       document.getElementById('editarProductoResultado').innerHTML =
         `<div class="alert alert-danger">${err.message}</div>`;
     });
+}
+// Buscar cliente
+function buscarCliente() {
+  let id = document.getElementById('clienteId').value.trim();
+  fetch(`/clients/${id}`, { headers: { 'Accept': 'application/json' } })
+    .then(res => { if (!res.ok) throw new Error('Cliente no encontrado'); return res.json(); })
+    .then(client => {
+      document.getElementById('clienteResultado').innerHTML = `
+        <div class="card"><div class="card-body">
+          <h5>${client.razon_social}</h5>
+          <p><b>RUT Empresa:</b> ${client.rut_empresa}</p>
+          <p><b>Rubro:</b> ${client.rubro}</p>
+          <p><b>Teléfono:</b> ${client.telefono || '-'}</p>
+          <p><b>Dirección:</b> ${client.direccion || '-'}</p>
+          <p><b>Contacto:</b> ${client.nombre_contacto} (${client.email_contacto})</p>
+        </div></div>`;
+    })
+    .catch(err => document.getElementById('clienteResultado').innerHTML =
+      `<div class="alert alert-danger">${err.message}</div>`);
+}
+
+// Crear cliente
+function crearCliente() {
+  let data = {
+    rut_empresa: document.getElementById('rutEmpresaCliente').value.trim(),
+    rubro: document.getElementById('rubroCliente').value.trim(),
+    razon_social: document.getElementById('razonSocialCliente').value.trim(),
+    telefono: document.getElementById('telefonoCliente').value.trim(),
+    direccion: document.getElementById('direccionCliente').value.trim(),
+    nombre_contacto: document.getElementById('nombreContactoCliente').value.trim(),
+    email_contacto: document.getElementById('emailContactoCliente').value.trim(),
+  };
+
+  // Validación rápida
+  if (!data.rut_empresa || !data.rubro || !data.razon_social || !data.nombre_contacto || !data.email_contacto) {
+    document.getElementById('crearClienteResultado').innerHTML =
+      `<div class="alert alert-warning">Completa los campos obligatorios</div>`;
+    return;
+  }
+
+fetch('/clients', {
+  method: 'POST',
+  headers: { 
+    'Content-Type': 'application/json',
+    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+  },
+  credentials: 'same-origin',
+  body: JSON.stringify(data)
+})
+
+  .then(res => {
+    if (!res.ok) throw new Error('Error en el servidor');
+    return res.json();
+  })
+  .then(client => {
+    document.getElementById('crearClienteResultado').innerHTML =
+      `<div class="alert alert-success">Cliente creado con ID: ${client.id}</div>`;
+    document.getElementById('crearClienteForm').reset();
+    setTimeout(() => location.reload(), 1000);
+  })
+  .catch(() => {
+    document.getElementById('crearClienteResultado').innerHTML =
+      `<div class="alert alert-danger">Error al crear cliente</div>`;
+  });
+}
+
+// Eliminar cliente
+function eliminarCliente() {
+  let id = document.getElementById('eliminarClienteId').value.trim();
+  fetch(`/clients/${id}`, { method: 'DELETE', headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' } })
+    .then(res => {
+      if(res.ok){
+        document.getElementById('eliminarClienteResultado').innerHTML =
+          `<div class="alert alert-success">Cliente eliminado</div>`;
+        setTimeout(() => location.reload(), 1000);
+      } else {
+        document.getElementById('eliminarClienteResultado').innerHTML =
+          `<div class="alert alert-danger">No se pudo eliminar</div>`;
+      }
+    });
+}
+
+// Cargar datos cliente
+function cargarClienteEditar() {
+  let id = document.getElementById('editarClienteId').value.trim();
+  fetch(`/clients/${id}`, { headers: { 'Accept': 'application/json' } })
+    .then(res => { if (!res.ok) throw new Error('Cliente no encontrado'); return res.json(); })
+    .then(client => {
+      document.getElementById('editarRutEmpresaCliente').value = client.rut_empresa || '';
+      document.getElementById('editarRubroCliente').value = client.rubro || '';
+      document.getElementById('editarRazonSocialCliente').value = client.razon_social || '';
+      document.getElementById('editarTelefonoCliente').value = client.telefono || '';
+      document.getElementById('editarDireccionCliente').value = client.direccion || '';
+      document.getElementById('editarNombreContactoCliente').value = client.nombre_contacto || '';
+      document.getElementById('editarEmailContactoCliente').value = client.email_contacto || '';
+      document.getElementById('editarClienteResultado').innerHTML =
+        `<div class="alert alert-success">Datos cargados</div>`;
+    })
+    .catch(err => document.getElementById('editarClienteResultado').innerHTML =
+      `<div class="alert alert-danger">${err.message}</div>`);
+}
+
+// Editar cliente
+function editarCliente() {
+  let id = document.getElementById('editarClienteId').value.trim();
+  let data = {
+    rut_empresa: document.getElementById('editarRutEmpresaCliente').value.trim(),
+    rubro: document.getElementById('editarRubroCliente').value.trim(),
+    razon_social: document.getElementById('editarRazonSocialCliente').value.trim(),
+    telefono: document.getElementById('editarTelefonoCliente').value.trim(),
+    direccion: document.getElementById('editarDireccionCliente').value.trim(),
+    nombre_contacto: document.getElementById('editarNombreContactoCliente').value.trim(),
+    email_contacto: document.getElementById('editarEmailContactoCliente').value.trim(),
+  };
+
+  fetch(`/clients/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(client => {
+    document.getElementById('editarClienteResultado').innerHTML =
+      `<div class="alert alert-success">Cliente actualizado: ${client.razon_social}</div>`;
+    setTimeout(() => location.reload(), 1000);
+  })
+  .catch(() => document.getElementById('editarClienteResultado').innerHTML =
+    `<div class="alert alert-danger">Error al editar cliente</div>`);
 }
 
 </script>

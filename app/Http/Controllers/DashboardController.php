@@ -18,13 +18,15 @@ class DashboardController extends Controller
         // Listas (para los modales)
         $users = User::all();
         $products = Product::all();
+        $clients = Client::all(); // 🔹 aquí estaba faltando
 
         return view('dashboard', compact(
             'usersCount',
             'productsCount',
             'clientsCount',
             'users',
-            'products'
+            'products',
+            'clients' // 🔹 lo pasamos a la vista
         ));
     }
 }

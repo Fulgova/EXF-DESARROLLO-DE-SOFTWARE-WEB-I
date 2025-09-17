@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserWebController;
 use App\Http\Controllers\AuthWebController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ClientsController;
 use App\Models\User;
 
 Route::get('/', function () {
@@ -52,3 +53,10 @@ Route::get('/products/{id}', [ProductWebController::class, 'show']);
 Route::post('/products', [ProductWebController::class, 'store']);
 Route::put('/products/{id}', [ProductWebController::class, 'update']);
 Route::delete('/products/{id}', [ProductWebController::class, 'destroy']);
+
+// Clientes
+Route::get('/clients', [ClientsController::class, 'index']);
+Route::get('/clients/{id}', [ClientsController::class, 'show']);
+Route::post('/clients', [ClientsController::class, 'store']);
+Route::put('/clients/{id}', [ClientsController::class, 'update']);
+Route::delete('/clients/{id}', [ClientsController::class, 'destroy']);

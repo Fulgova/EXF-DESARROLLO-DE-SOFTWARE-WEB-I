@@ -6,23 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::create('clients', function (Blueprint $table) {
-            $table->id(); // Identificador único
-            $table->string('rut_empresa')->unique(); // Rut de la empresa
-            $table->string('rubro'); // Giro o rubro de la empresa
-            $table->string('razon_social'); // Razón social
-            $table->string('telefono')->nullable();
-            $table->string('direccion')->nullable();
-            $table->string('nombre_contacto'); // Persona de contacto
-            $table->string('email_contacto')->unique(); // Email de contacto
-            $table->timestamps();
-        });
-    }
+public function up()
+{
+    Schema::create('clients', function (Blueprint $table) {
+        $table->id();
+        $table->string('rut_empresa', 20);
+        $table->string('rubro', 255);
+        $table->string('razon_social', 255);
+        $table->string('telefono', 20)->nullable();
+        $table->string('direccion', 255)->nullable();
+        $table->string('nombre_contacto', 255);
+        $table->string('email_contacto', 255);
+        $table->timestamps();
+    });
+}
 
-    public function down(): void
-    {
-        Schema::dropIfExists('clients');
-    }
+public function down()
+{
+    Schema::dropIfExists('clients');
+}
 };
